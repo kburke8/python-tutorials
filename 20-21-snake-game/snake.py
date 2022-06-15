@@ -5,6 +5,7 @@ DOWN = 270
 LEFT = 180
 RIGHT = 0
 
+
 class Snake:
 
     def __init__(self):
@@ -12,6 +13,7 @@ class Snake:
         for position in [(0, 0), (-20, 0), (-40, 0)]:
             self.initialize_snake_segment(position)
         self.head = self.segments[0]
+        self.grow = False
 
     def initialize_snake_segment(self, seg_position):
         segment = Turtle('square')
@@ -21,12 +23,18 @@ class Snake:
         self.segments.append(segment)
 
     def move(self):
+        if self.grow:
+            new_segment_position = self.segments[-1].position()
+
         for seg_num in range(len(self.segments) - 1, -1, -1):
             if seg_num == 0:
                 self.head.forward(20)
             else:
                 self.segments[seg_num].goto(self.segments[seg_num - 1].position())
                 self.segments[seg_num].setheading(self.segments[seg_num - 1].heading())
+        if self.grow:
+            self.initialize_snake_segment(new_segment_position)
+            self.grow = False
 
     def up(self):
         if self.head.heading() != DOWN:
